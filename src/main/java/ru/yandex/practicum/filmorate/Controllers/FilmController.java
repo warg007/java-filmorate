@@ -13,6 +13,7 @@ import java.util.Map;
 public class FilmController {
     private Map<Integer, Film> allFilms = new HashMap<>();
     private int idFilms = 1;
+
     @GetMapping("/films")
     public String getAllFilms() {
         return allFilms.values().toString();
@@ -29,7 +30,7 @@ public class FilmController {
     }
 
     @PostMapping("/films")
-    public Film addNewFilm (@Valid @RequestBody Film film) throws ValidationException {
+    public Film addNewFilm(@Valid @RequestBody Film film) throws ValidationException {
         film.setId(idFilms++);
         allFilms.put(film.getId(), film);
         if (allFilms.containsKey(film.getId())) {
