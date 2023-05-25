@@ -10,7 +10,6 @@ public class User {
     private String email;
     @NotBlank(message = "Логин не может быть пустым")
     private String login;
-    @NotNull
     private String name;
     @PastOrPresent(message = "Тебе нужно еще родиться")
     private LocalDate birthday;
