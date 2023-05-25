@@ -4,7 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -12,8 +14,8 @@ public class UserController {
     private int idUsers = 1;
 
     @GetMapping("/users")
-    public String getAllUsers() {
-        return allUsers.values().toString();
+    public List<User> getAllUsers() {
+        return new ArrayList<>(allUsers.values());
     }
 
     @PutMapping("/users")
@@ -23,7 +25,6 @@ public class UserController {
             return user;
         } else {
             throw new ValidationException("Ошибка валидации пользователя");
-            // я так предполагаю, что это сообщение надо отправлять клиенту или достаточно в консоль?
         }
     }
 
@@ -31,6 +32,9 @@ public class UserController {
     public User addNewUser(@Valid @RequestBody User user) throws ValidationException {
         user.setId(idUsers++);
         allUsers.put(user.getId(), user);
+        if (user.getName().isEmpty() || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
         if (allUsers.containsKey(user.getId())) {
             return user;
         } else {

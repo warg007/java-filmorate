@@ -1,4 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
+import lombok.Builder;
 import lombok.Data;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -14,26 +15,4 @@ public class User {
     private String name;
     @PastOrPresent(message = "Тебе нужно еще родиться")
     private LocalDate birthday;
-
-    public User(int id, String email, String login, LocalDate birthday) {
-        this.id = id;
-        this.email = email;
-        this.login = login;
-        this.birthday = birthday;
-        name = login;
-    }
-
-    public User(String email, String login, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.birthday = birthday;
-        name = login;
-    }
-
-    public User(String email, String login, String name, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.name = name;
-        this.birthday = birthday;
-    }
 }

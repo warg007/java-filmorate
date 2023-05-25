@@ -4,8 +4,13 @@ import org.springframework.validation.annotation.Validated;
 import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import org.springframework.web.bind.annotation.*;
+
+
 import javax.validation.Valid;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Validated
@@ -15,8 +20,8 @@ public class FilmController {
     private int idFilms = 1;
 
     @GetMapping("/films")
-    public String getAllFilms() {
-        return allFilms.values().toString();
+    public List<Film> getAllFilms() {
+        return new ArrayList<>(allFilms.values());
     }
 
     @PutMapping("/films")
@@ -38,9 +43,5 @@ public class FilmController {
         } else {
             throw new ValidationException("Ошибка валидации фильма");
         }
-        /*
-        Я видел как сделать более красиво без этой проверки if (если валидация не прошла и выкинуть ошибку)
-        Но там большой кусок кода, который не понятный. А просто копировать без разбора нет смысла.
-         */
     }
 }
