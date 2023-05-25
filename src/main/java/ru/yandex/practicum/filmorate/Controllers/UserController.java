@@ -32,7 +32,7 @@ public class UserController {
     public User addNewUser(@Valid @RequestBody User user) throws ValidationException {
         user.setId(idUsers++);
         allUsers.put(user.getId(), user);
-        if (user.getName().isEmpty() || user.getName().isBlank()) {
+        if (user.getName() == null || user.getName().isEmpty() || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         if (allUsers.containsKey(user.getId())) {
