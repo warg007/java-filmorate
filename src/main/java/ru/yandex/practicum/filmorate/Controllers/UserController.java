@@ -1,9 +1,14 @@
 package ru.yandex.practicum.filmorate.Controllers;
 
+import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.Controllers.validation.UserValidationService;
 import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +17,9 @@ import java.util.List;
 public class UserController {
     private HashMap<Integer, User> allUsers = new HashMap<>();
     private int idUsers = 1;
+    UserValidationService validUser = new UserValidationService();
+    private final static Logger log = LoggerFactory.getLogger(User.class);
+    Gson gson = new Gson();
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -19,26 +27,34 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public User update(@RequestBody User user) throws ValidationException {
+    public ResponseEntity updateUser(@RequestBody User user) {
         if (allUsers.containsKey(user.getId())) {
-            allUsers.put(user.getId(), user);
-            return user;
+            try {
+                validUser.validUser(user);
+                allUsers.put(user.getId(), user);
+                log.info("Данные пользователя успешно обновлены: " + user);
+            } catch (ValidationException e) {
+                log.info("Ошибка обновления данных: " + e.getMessage());
+                return ResponseEntity.badRequest().body(gson.toJson("Ошибка обновления данных: " + e.getMessage()));
+            }
         } else {
-            throw new ValidationException("Ошибка валидации пользователя");
+            log.info("Не найден пользователь");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(gson.toJson("Не найден пользователь"));
         }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PostMapping("/users")
-    public User addNewUser(@Valid @RequestBody User user) throws ValidationException {
-        user.setId(idUsers++);
-        allUsers.put(user.getId(), user);
-        if (user.getName() == null || user.getName().isEmpty() || user.getName().isBlank()) {
-            user.setName(user.getLogin());
+    public ResponseEntity addNewUser(@RequestBody User user) {
+        try {
+            validUser.validUser(user);
+            user.setId(idUsers++);
+            allUsers.put(user.getId(), user);
+            log.info("Зарегистрирован новый пользователь: " + user);
+        } catch (ValidationException e) {
+            log.info("Ошибка регистрации нового пользователя: " + e.getMessage());
+            return ResponseEntity.badRequest().body(gson.toJson("Ошибка регистрации нового пользователя: " + e.getMessage()));
         }
-        if (allUsers.containsKey(user.getId())) {
-            return user;
-        } else {
-            throw new ValidationException("Ошибка валидации пользователя");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 }
