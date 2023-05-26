@@ -18,7 +18,7 @@ public class UserController {
     private HashMap<Integer, User> allUsers = new HashMap<>();
     private int idUsers = 1;
     UserValidationService validUser = new UserValidationService();
-    private final static Logger log = LoggerFactory.getLogger(User.class);
+    private static final Logger log = LoggerFactory.getLogger(User.class);
     Gson gson = new Gson();
 
     @GetMapping("/users")

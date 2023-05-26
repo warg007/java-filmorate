@@ -19,7 +19,7 @@ public class FilmController {
     private Map<Integer, Film> allFilms = new HashMap<>();
     private int idFilms = 1;
     FilmValidationService filmValid = new FilmValidationService();
-    private final static Logger log = LoggerFactory.getLogger(Film.class);
+    private static final Logger log = LoggerFactory.getLogger(Film.class);
     Gson gson = new Gson();
 
     @GetMapping("/films")
