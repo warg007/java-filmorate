@@ -1,60 +1,67 @@
 package ru.yandex.practicum.filmorate.Controllers;
 
-import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.Controllers.validation.UserValidationService;
-import ru.yandex.practicum.filmorate.Exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.User;
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.filmorate.Model.User;
+import ru.yandex.practicum.filmorate.Service.UserService;
+
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 public class UserController {
-    private HashMap<Integer, User> allUsers = new HashMap<>();
-    private int idUsers = 1;
-    UserValidationService validUser = new UserValidationService();
-    private static final Logger log = LoggerFactory.getLogger(User.class);
-    Gson gson = new Gson();
+    private final UserService userService;
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return new ArrayList<>(allUsers.values());
+    public List<User> getAll() {
+        return userService.getAll();
+    }
+
+    @GetMapping("/users/{id}")
+    public User getOne(@PathVariable int id) {
+        return userService.getUserByIdService(id);
     }
 
     @PutMapping("/users")
-    public ResponseEntity updateUser(@RequestBody User user) {
-        if (allUsers.containsKey(user.getId())) {
-            try {
-                validUser.validUser(user);
-                allUsers.put(user.getId(), user);
-                log.info("Данные пользователя успешно обновлены: " + user);
-            } catch (ValidationException e) {
-                log.info("Ошибка обновления данных: " + e.getMessage());
-                return ResponseEntity.badRequest().body(gson.toJson("Ошибка обновления данных: " + e.getMessage()));
-            }
-        } else {
-            log.info("Не найден пользователь");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(gson.toJson("Не найден пользователь"));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    public User update(@RequestBody User user) {
+        userService.update(user);
+        return user;
     }
 
     @PostMapping("/users")
-    public ResponseEntity addNewUser(@RequestBody User user) {
-        try {
-            validUser.validUser(user);
-            user.setId(idUsers++);
-            allUsers.put(user.getId(), user);
-            log.info("Зарегистрирован новый пользователь: " + user);
-        } catch (ValidationException e) {
-            log.info("Ошибка регистрации нового пользователя: " + e.getMessage());
-            return ResponseEntity.badRequest().body(gson.toJson("Ошибка регистрации нового пользователя: " + e.getMessage()));
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public User addNewUser(@RequestBody User user) {
+        userService.addNewUser(user);
+        return user;
+    }
+
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public ResponseEntity<String> addNewFriend(@PathVariable("id") int hostId, @PathVariable int friendId) {
+        String body = userService.addNewFriend(hostId, friendId);
+        return ResponseEntity.status(HttpStatus.OK).body(body);
+    }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public ResponseEntity<String> deleteFriend(@PathVariable("id") int hostId, @PathVariable int friendId) {
+        String body = userService.deleteFriend(hostId, friendId);
+        return ResponseEntity.status(HttpStatus.OK).body(body);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public ResponseEntity<List<User>> commonFriend(@PathVariable("id") int hostId, @PathVariable int otherId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.commonFriends(hostId, otherId));
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public ResponseEntity<List<User>> friendList(@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.friendList(id));
     }
 }
+
