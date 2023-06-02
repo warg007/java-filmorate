@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Exceptions.ValidException;
 import ru.yandex.practicum.filmorate.Model.User;
-
 import java.time.LocalDate;
+
 @Component
 @Slf4j
 public class UserValidationService {
