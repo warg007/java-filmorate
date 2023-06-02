@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     private final HashMap<Integer, Film> filmStorage = new HashMap<>();
     private final Set<Film> sortedByLikes = new TreeSet<>();
     private int filmId = 1;
