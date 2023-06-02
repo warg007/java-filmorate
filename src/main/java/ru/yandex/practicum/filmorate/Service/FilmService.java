@@ -25,8 +25,11 @@ public class FilmService {
     public Film update(Film film) {
         filmValidationService.validFilm(film);
         if (filmStorage.getFilmById(film.getId()).isPresent()) {
+            filmStorage.deleteFromTreeSet(getFilmByIdService(film.getId()));
+            Film timeless = filmStorage.update(film).get();
             log.info("Обновлены данные фильма: " + film);
-            return filmStorage.update(film).get();
+            filmStorage.addToTreeSet(timeless);
+            return timeless;
         } else {
             throw new HandlerNullPointException("Фильм с id " + film.getId() + " для обновления не найден");
         }
@@ -35,6 +38,7 @@ public class FilmService {
     public Film addNew(Film film) {
         filmValidationService.validFilm(film);
         Film timeless = filmStorage.addNew(film);
+        filmStorage.addToTreeSet(timeless);
         log.info("Новый фильм сохранен: " + timeless);
         return timeless;
     }
