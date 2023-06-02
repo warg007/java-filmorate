@@ -47,7 +47,7 @@ public class FilmService {
         }
     }
 
-    public void delete(int id){
+    public void delete(int id) {
         filmStorage.delete(id);
         log.info("Запрос на удаление фильма с id: " + id);
     }
@@ -70,7 +70,7 @@ public class FilmService {
         return userName + " удалил(а) свой лайк у фильма " + filmName;
     }
 
-    public List<Film> topLiked (Optional<Integer> count) {
+    public List<Film> topLiked(Optional<Integer> count) {
         return filmStorage.getSortedByLikes(count);
     }
 }
