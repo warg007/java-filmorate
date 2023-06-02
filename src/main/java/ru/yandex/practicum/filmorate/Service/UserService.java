@@ -46,7 +46,7 @@ public class UserService {
         }
     }
 
-    public void delete(int id){
+    public void delete(int id) {
         userStorage.delete(id);
         log.info("Запрос на удаление пользователя с id: " + id);
     }
@@ -82,7 +82,7 @@ public class UserService {
     public List<User> friendList(int id) {
         List<Integer> timeless = new ArrayList<>(getUserByIdService(id).getFriendsList());
         ArrayList<User> answer = new ArrayList<>();
-        for(int i: timeless) {
+        for (int i: timeless) {
             answer.add(getUserByIdService(i));
         }
         new ArrayList<>(getUserByIdService(id).getFriendsList());
