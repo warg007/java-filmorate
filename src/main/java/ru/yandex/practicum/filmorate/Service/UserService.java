@@ -74,7 +74,7 @@ public class UserService {
         Set<Integer> friendFriends = getUserByIdService(friendId).getFriendsList();
         Set<Integer> timeless = Sets.intersection(hostFriends, friendFriends);
         ArrayList<User> answer = new ArrayList<>();
-        for(int i: timeless) {
+        for (int i: timeless) {
             answer.add(userStorage.getUserById(i).get());
         }
         return answer;
