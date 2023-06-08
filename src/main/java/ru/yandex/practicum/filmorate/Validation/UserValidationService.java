@@ -1,12 +1,10 @@
 package ru.yandex.practicum.filmorate.Validation;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Exceptions.ValidException;
 import ru.yandex.practicum.filmorate.Model.User;
 
 @Component
-@Slf4j
 public class UserValidationService {
 
     private void validLogin(User user) throws ValidException {

@@ -23,7 +23,7 @@ public class FilmService {
 
     public Film update(Film film) {
         Optional<Film> timeless = filmStorage.update(film);
-        if (filmStorage.getFilmById(film.getId()).isPresent()) {
+        if (timeless.isPresent()) {
             log.info("Обновлены данные фильма: " + film);
             return timeless.get();
         } else {

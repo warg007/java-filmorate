@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -39,6 +40,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         film.setId(filmId++);
         filmStorage.put(film.getId(), film);
         addToTreeSet(film);
+        System.out.println(sortedByLikes);
         return film;
     }
 
@@ -61,25 +63,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     public List<Film> getSortedByLikes(Optional<Integer> count) {
-        int filmCount = 0;
-        ArrayList<Film> answer = new ArrayList<>();
-        List<Film> timeless = List.copyOf(sortedByLikes);
-        if (count.isEmpty()) {
-            if (timeless.size() > 10) {
-                filmCount = 10;
-            } else {
-                filmCount = timeless.size();
-            }
-        } else {
-            if (count.get() > timeless.size()) {
-                filmCount = timeless.size();
-            } else {
-                filmCount = count.get();
-            }
-        }
-        for (int i = 0; i < filmCount; i++) {
-            answer.add(timeless.get(i));
-        }
-        return answer;
+        return count.map(s -> sortedByLikes.stream()
+                .limit(s)
+                .collect(Collectors.toList()))
+                .orElseGet(() -> sortedByLikes.stream()
+                .limit(10)
+                .collect(Collectors.toList()));
     }
 }

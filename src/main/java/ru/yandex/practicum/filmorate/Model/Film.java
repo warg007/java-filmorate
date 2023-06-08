@@ -27,6 +27,9 @@ public class Film implements Comparable<Film> {
 
     @Override
     public int compareTo(Film o) {
+        if (likesList.isEmpty()) {
+            return o.id - id;
+        }
         return o.likesList.size() - likesList.size();
     }
 }
