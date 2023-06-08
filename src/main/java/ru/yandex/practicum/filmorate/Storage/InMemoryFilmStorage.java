@@ -40,7 +40,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         film.setId(filmId++);
         filmStorage.put(film.getId(), film);
         addToTreeSet(film);
-        System.out.println(sortedByLikes);
         return film;
     }
 

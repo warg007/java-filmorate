@@ -29,10 +29,10 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleNullPointer1(MethodArgumentNotValidException e) {
         String exceptionMessage = Objects.requireNonNull(e.getFieldError()).getDefaultMessage();
-        log.warn("Ошибка: " + exceptionMessage);
+        log.warn("Ошибка валидации: " + exceptionMessage);
         return Map.of("Ошибка валидации: ", exceptionMessage);
     }
 }
