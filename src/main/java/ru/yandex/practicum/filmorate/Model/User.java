@@ -15,8 +15,8 @@ public class User {
     private int id;
     @Email(message = "Введена некорректная электронная почта")
     private String email;
-    @NotNull(message = "Логин не может быть пустым")
-    @NotBlank(message = "Логин не может быть пустым")
+    @NotNull(message = "Логин не может быть пустым и не должен содержать пробелы")
+    @NotBlank(message = "Логин не может быть пустым и не должен содержать пробелы")
     private String login;
     private String name;
     @Past(message = "Нужно родиться")

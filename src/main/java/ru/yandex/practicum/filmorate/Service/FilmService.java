@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exceptions.HandlerNullPointException;
 import ru.yandex.practicum.filmorate.Model.Film;
 import ru.yandex.practicum.filmorate.Storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.Validation.FilmValidationService;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FilmService {
     private final InMemoryFilmStorage filmStorage;
-    private final FilmValidationService filmValidationService;
     private final UserService userService;
 
     public List<Film> getAll() {
@@ -23,7 +22,6 @@ public class FilmService {
     }
 
     public Film update(Film film) {
-        filmValidationService.validFilm(film);
         Optional<Film> timeless = filmStorage.update(film);
         if (filmStorage.getFilmById(film.getId()).isPresent()) {
             log.info("Обновлены данные фильма: " + film);
@@ -35,7 +33,6 @@ public class FilmService {
     }
 
     public Film addNew(Film film) {
-        filmValidationService.validFilm(film);
         Film timeless = filmStorage.addNew(film);
         log.info("Новый фильм сохранен: " + timeless);
         return timeless;

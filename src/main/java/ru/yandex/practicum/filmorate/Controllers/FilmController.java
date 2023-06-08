@@ -15,11 +15,13 @@ import ru.yandex.practicum.filmorate.Exceptions.ValidException;
 import ru.yandex.practicum.filmorate.Model.Film;
 import ru.yandex.practicum.filmorate.Service.FilmService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Valid
 public class FilmController {
     private final FilmService filmService;
 
@@ -34,13 +36,13 @@ public class FilmController {
     }
 
     @PutMapping("/films")
-    public Film update(@RequestBody Film film) throws ValidException {
+    public Film update(@Valid @RequestBody Film film) throws ValidException {
         filmService.update(film);
         return film;
     }
 
     @PostMapping("/films")
-    public Film addNew(@RequestBody Film film) throws ValidException {
+    public Film addNew(@Valid @RequestBody Film film) throws ValidException {
         filmService.addNew(film);
         return film;
     }

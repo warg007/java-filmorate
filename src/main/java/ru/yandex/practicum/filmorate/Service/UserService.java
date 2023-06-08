@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exceptions.HandlerNullPointException;
 import ru.yandex.practicum.filmorate.Model.User;
 import ru.yandex.practicum.filmorate.Storage.UserStorage;
+import ru.yandex.practicum.filmorate.Validation.UserValidationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +20,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
     private final UserStorage userStorage;
-    //private final UserValidationService userValidationService;
+    private final UserValidationService userValidationService;
 
     public List<User> getAll() {
         return userStorage.getAll();
     }
 
     public User update(User user) {
-        //userValidationService.validUser(user);
+        userValidationService.validUser(user);
         Optional<User> answer = userStorage.update(user);
         if (answer.isPresent()) {
             log.info("Обновлены данные пользователя: " + user);
@@ -37,7 +38,7 @@ public class UserService {
     }
 
     public User addNewUser(User user) {
-        //userValidationService.validUser(user);
+        userValidationService.validUser(user);
         User timeless = userStorage.addNewUser(user);
         log.info("Новый пользователь сохранен: " + timeless);
         return timeless;
