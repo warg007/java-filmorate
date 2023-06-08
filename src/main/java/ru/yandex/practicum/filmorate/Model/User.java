@@ -22,4 +22,11 @@ public class User {
     @Past(message = "Нужно родиться")
     private LocalDate birthday;
     private Set<Integer> friendsList = new HashSet<>();
+
+    public User(String email, String login, String name, LocalDate birthday) {
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
 }
