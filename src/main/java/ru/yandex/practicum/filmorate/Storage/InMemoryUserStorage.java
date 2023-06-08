@@ -35,11 +35,6 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void delete(Integer id) {
-        userStorage.remove(id);
-    }
-
-    @Override
     public Optional<User> getUserById(int id) {
         if (userStorage.containsKey(id)) {
             return Optional.of(userStorage.get(id));

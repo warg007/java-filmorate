@@ -46,15 +46,13 @@ public class FilmController {
     }
 
     @PutMapping("/films/{id}/like/{userId}")
-    public ResponseEntity<String> likedFilm(@PathVariable int id, @PathVariable int userId) {
-        String body = filmService.likedFilm(userId, id);
-        return ResponseEntity.status(HttpStatus.OK).body(body);
+    public void likedFilm(@PathVariable int id, @PathVariable int userId) {
+       filmService.likedFilm(userId, id);
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
-    public ResponseEntity<String> deleteLike(@PathVariable int id, @PathVariable int userId) {
-        String body = filmService.deleteLike(userId, id);
-        return ResponseEntity.status(HttpStatus.OK).body(body);
+    public void deleteLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.deleteLike(userId, id);
     }
 
     @GetMapping("/films/popular")

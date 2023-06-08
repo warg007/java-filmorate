@@ -2,16 +2,18 @@ package ru.yandex.practicum.filmorate.Storage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Model.Film;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private final HashMap<Integer, Film> filmStorage = new HashMap<>();
+    private final Map<Integer, Film> filmStorage = new HashMap<>();
     private final Set<Film> sortedByLikes = new TreeSet<>();
     private int filmId = 1;
 
@@ -23,7 +25,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> update(Film film) {
         if (filmStorage.containsKey(film.getId())) {
+            deleteFromTreeSet(filmStorage.get(film.getId()));
             filmStorage.put(film.getId(), film);
+            addToTreeSet(film);
             return Optional.of(film);
         } else {
             return Optional.empty();
@@ -34,13 +38,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film addNew(Film film) {
         film.setId(filmId++);
         filmStorage.put(film.getId(), film);
+        addToTreeSet(film);
         return film;
     }
 
-    @Override
-    public void delete(Integer id) {
-        filmStorage.remove(id);
-    }
 
     @Override
     public Optional<Film> getFilmById(int id) {
