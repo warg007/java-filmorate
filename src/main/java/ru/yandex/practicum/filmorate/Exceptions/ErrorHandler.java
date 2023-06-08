@@ -33,6 +33,6 @@ public class ErrorHandler {
     public Map<String, String> handleNullPointer1(MethodArgumentNotValidException e) {
         String exceptionMessage = Objects.requireNonNull(e.getFieldError()).getDefaultMessage();
         log.warn("Ошибка: " + exceptionMessage);
-        return Map.of("Ошибка валидации: ", exceptionMessage );
+        return Map.of("Ошибка валидации: ", exceptionMessage);
     }
 }
