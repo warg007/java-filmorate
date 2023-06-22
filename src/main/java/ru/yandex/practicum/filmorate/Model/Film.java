@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.Model;
 
+import lombok.Builder;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.Validation.MinimumDate;
 
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Builder
 public class Film implements Comparable<Film> {
     private int id;
     @NotBlank
@@ -23,7 +25,7 @@ public class Film implements Comparable<Film> {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительной")
     private long duration;
-    private Set<Integer> likesList = new HashSet<>();
+    private final Set<Integer> likesList = new HashSet<>();
 
     @Override
     public int compareTo(Film o) {
