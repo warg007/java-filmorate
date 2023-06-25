@@ -29,6 +29,7 @@ class FilmServiceTest {
         userService = new UserService(userStorage, validationService);
         filmService = new FilmService(filmStorage, userService);
     }
+
     Film film1 = Film.builder()
             .name("film1")
             .id(1)
@@ -78,6 +79,7 @@ class FilmServiceTest {
 
         Assertions.assertArrayEquals(actual, expected);
     }
+
     @Test
     void update() {
         filmService.addNew(film1);
