@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.Model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Builder
 public class User {
     private int id;
     @Email(message = "Введена некорректная электронная почта")
@@ -21,5 +23,5 @@ public class User {
     private String name;
     @Past(message = "Нужно родиться")
     private LocalDate birthday;
-    private Set<Integer> friendsList = new HashSet<>();
+    private final Set<Integer> friendsList = new HashSet<>();
 }
