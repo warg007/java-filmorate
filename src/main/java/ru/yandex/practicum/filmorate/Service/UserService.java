@@ -1,25 +1,21 @@
 package ru.yandex.practicum.filmorate.Service;
 
-import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exceptions.HandlerNullPointException;
 import ru.yandex.practicum.filmorate.Model.User;
-import ru.yandex.practicum.filmorate.Storage.UserStorage;
+import ru.yandex.practicum.filmorate.Storage.UserDbStorage;
 import ru.yandex.practicum.filmorate.Validation.UserValidationService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class UserService {
-    private final UserStorage userStorage;
+    private final UserDbStorage userStorage;
     private final UserValidationService userValidationService;
 
     public List<User> getAll() {
@@ -53,37 +49,37 @@ public class UserService {
         }
     }
 
-    public void addNewFriend(int hostId, int friendId) {
-        String host = getUserByIdService(hostId).getName();
-        String friend = getUserByIdService(friendId).getName();
-        getUserByIdService(hostId).getFriendsList().add(friendId);
-        getUserByIdService(friendId).getFriendsList().add(hostId);
-        log.info(host + " и " + friend + " подружились");
-    }
-
-    public void deleteFriend(int hostId, int friendId) {
-        String host = getUserByIdService(hostId).getName();
-        String friend = getUserByIdService(friendId).getName();
-        getUserByIdService(hostId).getFriendsList().remove(friendId);
-        getUserByIdService(friendId).getFriendsList().remove(hostId);
-        log.info(host + " и " + friend + " больше не дружат");
-    }
-
-    public List<User> commonFriends(int hostId, int friendId) {
-        Set<Integer> hostFriends = getUserByIdService(hostId).getFriendsList();
-        Set<Integer> friendFriends = getUserByIdService(friendId).getFriendsList();
-        Set<Integer> timeless = Sets.intersection(hostFriends, friendFriends);
-        ArrayList<User> answer = new ArrayList<>();
-        for (int i: timeless) {
-            answer.add(userStorage.getUserById(i).get());
-        }
-        return answer;
-    }
-
-    public List<User> friendList(int id) {
-        List<Integer> timeless = new ArrayList<>(getUserByIdService(id).getFriendsList());
-        return timeless.stream()
-                .map(this::getUserByIdService)
-                .collect(Collectors.toList());
-    }
+//    public void addNewFriend(int hostId, int friendId) {
+//        String host = getUserByIdService(hostId).getName();
+//        String friend = getUserByIdService(friendId).getName();
+//        getUserByIdService(hostId).getFriendsList().add(friendId);
+//        getUserByIdService(friendId).getFriendsList().add(hostId);
+//        log.info(host + " и " + friend + " подружились");
+//    }
+//
+//    public void deleteFriend(int hostId, int friendId) {
+//        String host = getUserByIdService(hostId).getName();
+//        String friend = getUserByIdService(friendId).getName();
+//        getUserByIdService(hostId).getFriendsList().remove(friendId);
+//        getUserByIdService(friendId).getFriendsList().remove(hostId);
+//        log.info(host + " и " + friend + " больше не дружат");
+//    }
+//
+//    public List<User> commonFriends(int hostId, int friendId) {
+//        Set<Integer> hostFriends = getUserByIdService(hostId).getFriendsList();
+//        Set<Integer> friendFriends = getUserByIdService(friendId).getFriendsList();
+//        Set<Integer> timeless = Sets.intersection(hostFriends, friendFriends);
+//        ArrayList<User> answer = new ArrayList<>();
+//        for (int i: timeless) {
+//            answer.add(userStorage.getUserById(i).get());
+//        }
+//        return answer;
+//    }
+//
+//    public List<User> friendList(int id) {
+//        List<Integer> timeless = new ArrayList<>(getUserByIdService(id).getFriendsList());
+//        return timeless.stream()
+//                .map(this::getUserByIdService)
+//                .collect(Collectors.toList());
+//    }
 }
