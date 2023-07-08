@@ -25,5 +25,4 @@ public class User {
     private String name;
     @Past(message = "Нужно родиться")
     private LocalDate birthday;
-
 }

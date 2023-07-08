@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,10 +32,8 @@ public class Film {
     private long duration;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer rate;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Mpa mpa;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
 
 }

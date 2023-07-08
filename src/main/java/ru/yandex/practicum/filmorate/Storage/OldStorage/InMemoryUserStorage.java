@@ -1,7 +1,9 @@
-package ru.yandex.practicum.filmorate.Storage;
+package ru.yandex.practicum.filmorate.Storage.OldStorage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Model.User;
+import ru.yandex.practicum.filmorate.Storage.UserStorage;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

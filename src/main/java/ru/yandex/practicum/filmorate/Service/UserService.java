@@ -3,8 +3,10 @@ package ru.yandex.practicum.filmorate.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.Exceptions.DataNotExistsException;
 import ru.yandex.practicum.filmorate.Exceptions.HandlerNullPointException;
 import ru.yandex.practicum.filmorate.Model.User;
+import ru.yandex.practicum.filmorate.Storage.FriendDbStorage;
 import ru.yandex.practicum.filmorate.Storage.UserDbStorage;
 import ru.yandex.practicum.filmorate.Validation.UserValidationService;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class UserService {
     private final UserDbStorage userStorage;
     private final UserValidationService userValidationService;
+    private final FriendDbStorage friendStorage;
 
     public List<User> getAll() {
         return userStorage.getAll();
@@ -41,45 +44,33 @@ public class UserService {
     }
 
     public User getUserByIdService(int id) {
-        Optional<User> timeless = userStorage.getUserById(id);
-        if (timeless.isPresent()) {
-            return timeless.get();
-        } else {
-            throw new HandlerNullPointException("Не найден пользователь с id: " + id);
-        }
+        return userStorage.getUserById(id).
+                orElseThrow(() -> new DataNotExistsException("Не найден пользователь с id: " + id));
     }
 
-//    public void addNewFriend(int hostId, int friendId) {
-//        String host = getUserByIdService(hostId).getName();
-//        String friend = getUserByIdService(friendId).getName();
-//        getUserByIdService(hostId).getFriendsList().add(friendId);
-//        getUserByIdService(friendId).getFriendsList().add(hostId);
-//        log.info(host + " и " + friend + " подружились");
-//    }
-//
-//    public void deleteFriend(int hostId, int friendId) {
-//        String host = getUserByIdService(hostId).getName();
-//        String friend = getUserByIdService(friendId).getName();
-//        getUserByIdService(hostId).getFriendsList().remove(friendId);
-//        getUserByIdService(friendId).getFriendsList().remove(hostId);
-//        log.info(host + " и " + friend + " больше не дружат");
-//    }
-//
-//    public List<User> commonFriends(int hostId, int friendId) {
-//        Set<Integer> hostFriends = getUserByIdService(hostId).getFriendsList();
-//        Set<Integer> friendFriends = getUserByIdService(friendId).getFriendsList();
-//        Set<Integer> timeless = Sets.intersection(hostFriends, friendFriends);
-//        ArrayList<User> answer = new ArrayList<>();
-//        for (int i: timeless) {
-//            answer.add(userStorage.getUserById(i).get());
-//        }
-//        return answer;
-//    }
-//
-//    public List<User> friendList(int id) {
-//        List<Integer> timeless = new ArrayList<>(getUserByIdService(id).getFriendsList());
-//        return timeless.stream()
-//                .map(this::getUserByIdService)
-//                .collect(Collectors.toList());
-//    }
+    public void addNewFriend(int hostId, int friendId) {
+        String host = getUserByIdService(hostId).getName();
+        String friend = getUserByIdService(friendId).getName();
+
+        friendStorage.addFriend(hostId, friendId);
+        log.info(host + " отправил запрос на дружбу " + friend);
+    }
+
+    public void deleteFriend(int hostId, int friendId) {
+        String host = getUserByIdService(hostId).getName();
+        String friend = getUserByIdService(friendId).getName();
+        friendStorage.deleteFriend(hostId, friendId);
+        log.info(host + " удалил из друзей " + friend);
+    }
+
+    public List<User> commonFriends(int hostId, int friendId) {
+        List<User> hostFriends = friendList(hostId);
+        List<User> friendsFriend = friendList(friendId);
+        hostFriends.retainAll(friendsFriend);
+        return hostFriends;
+    }
+
+    public List<User> friendList(int id) {
+        return friendStorage.friendList(id);
+    }
 }

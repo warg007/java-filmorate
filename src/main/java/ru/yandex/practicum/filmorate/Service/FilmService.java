@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.Exceptions.DataNotExistsException;
 import ru.yandex.practicum.filmorate.Exceptions.HandlerNullPointException;
 import ru.yandex.practicum.filmorate.Model.Film;
 import ru.yandex.practicum.filmorate.Storage.FilmDbStorage;
@@ -24,7 +25,7 @@ public class FilmService {
     public Film update(Film film) {
         Optional<Film> timeless = filmStorage.update(film);
         if (timeless.isPresent()) {
-            log.info("Обновлены данные фильма: " + film);
+            log.info("Обновлены данные фильма: " + timeless);
             return timeless.get();
         } else {
             throw new HandlerNullPointException("Фильм с id " + film.getId() + " для обновления не найден");
@@ -40,29 +41,24 @@ public class FilmService {
 
     public Film getFilmByIdService(int id) {
         return filmStorage.getFilmById(id)
-                .orElseThrow(() -> new HandlerNullPointException("Не найден фильм с id: " + id));
+                .orElseThrow(() -> new DataNotExistsException("Не найден фильм с id: " + id));
     }
 
     public void likedFilm(int userId, int filmId) {
         String userName = userService.getUserByIdService(userId).getName();
         String filmName = getFilmByIdService(filmId).getName();
-        Film timeless = getFilmByIdService(filmId);
-
-
+        filmStorage.likedFilm(userId, filmId);
         log.info(userName + " поставил(а) лайк фильму " + filmName);
     }
-//
-//    public void deleteLike(int userId, int filmId) {
-//        String userName = userService.getUserByIdService(userId).getName();
-//        String filmName = getFilmByIdService(filmId).getName();
-//        Film timeless  = getFilmByIdService(filmId);
-//        filmStorage.deleteFromTreeSet(timeless);
-//        timeless.getLikesList().remove(userId);
-//        filmStorage.addToTreeSet(getFilmByIdService(filmId));
-//        log.info(userName + " удалил(а) свой лайк у фильма " + filmName);
-//    }
-//
-//    public List<Film> topLiked(Optional<Integer> count) {
-//        return filmStorage.getSortedByLikes(count);
-//    }
+
+    public void deleteLike(int userId, int filmId) {
+        String userName = userService.getUserByIdService(userId).getName();
+        String filmName = getFilmByIdService(filmId).getName();
+        filmStorage.deleteLike(userId, filmId);
+        log.info(userName + " удалил(а) свой лайк у фильма " + filmName);
+    }
+
+    public List<Film> topLiked(Optional<Integer> count) {
+        return filmStorage.getSortedByLikes(count);
+    }
 }
