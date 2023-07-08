@@ -28,8 +28,8 @@ public class FilmDbStorage implements  FilmStorage{
 
     @Override
     public List<Film> getAll() {
-        String SQLlink = "select * from films";
-        return this.jdbcTemplate.query(SQLlink, new FilmMapper(mpaDbStorage, genreDbStorage));
+        String link = "select * from films";
+        return this.jdbcTemplate.query(link, new FilmMapper(mpaDbStorage, genreDbStorage));
     }
 
     @Override
@@ -62,23 +62,23 @@ public class FilmDbStorage implements  FilmStorage{
     public Optional<Film> getFilmById(int id) {
         Film film;
         try {
-            String SQLlink = "select * from films where id = ?";
-            film = jdbcTemplate.queryForObject(SQLlink, new Object[]{id}, new FilmMapper(mpaDbStorage, genreDbStorage));
+            String link = "select * from films where id = ?";
+            film = jdbcTemplate.queryForObject(link, new Object[]{id}, new FilmMapper(mpaDbStorage, genreDbStorage));
         } catch (Exception e) {
             return Optional.empty();
         }
         return Optional.of(film);
     }
     private boolean checkLikeByUser(int userId, int filmId) {
-        String SQLlink = "select id_film from likes where id_user = " + userId;
-        List<Integer> idFilm = jdbcTemplate.query(SQLlink, (resultSet, rowNum) -> resultSet.getInt("id_film"));
+        String link = "select id_film from likes where id_user = " + userId;
+        List<Integer> idFilm = jdbcTemplate.query(link, (resultSet, rowNum) -> resultSet.getInt("id_film"));
         return !idFilm.contains(filmId);
     }
 
     public void likedFilm(int userId, int filmId) {
-        String SQLlink = "insert into likes (id_film, id_user) values (?, ?)";
+        String link = "insert into likes (id_film, id_user) values (?, ?)";
         if (checkLikeByUser(userId, filmId) && getFilmById(filmId).isPresent()) {
-            jdbcTemplate.update(SQLlink, filmId, userId);
+            jdbcTemplate.update(link, filmId, userId);
             int updatedRate = getFilmById(filmId).get().getRate() + 1;
             Film updatedFilm = getFilmById(filmId).get();
             updatedFilm.setRate(updatedRate);
@@ -87,9 +87,9 @@ public class FilmDbStorage implements  FilmStorage{
     }
 
     public void deleteLike(int userId, int filmId) {
-        String SQLlink = "delete from likes where id_film = ? and id_user = ?";
+        String link = "delete from likes where id_film = ? and id_user = ?";
         if (checkLikeByUser(userId, filmId) && getFilmById(filmId).isPresent()) {
-            jdbcTemplate.update(SQLlink, filmId, userId);
+            jdbcTemplate.update(link, filmId, userId);
             int updatedRate = getFilmById(filmId).get().getRate() - 1;
             Film updatedFilm = getFilmById(filmId).get();
             updatedFilm.setRate(updatedRate);
@@ -98,8 +98,8 @@ public class FilmDbStorage implements  FilmStorage{
     }
 
     public List<Film> getSortedByLikes(Optional<Integer> count) {
-        String SQLlink = "select * from films order by rate desc";
-        List<Film> sortedByLikes = jdbcTemplate.query(SQLlink, new FilmMapper(mpaDbStorage, genreDbStorage));
+        String link = "select * from films order by rate desc";
+        List<Film> sortedByLikes = jdbcTemplate.query(link, new FilmMapper(mpaDbStorage, genreDbStorage));
         return count.map(s -> sortedByLikes.stream()
                         .limit(s)
                         .collect(Collectors.toList()))

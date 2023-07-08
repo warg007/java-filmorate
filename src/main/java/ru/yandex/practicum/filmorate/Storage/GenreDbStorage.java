@@ -20,8 +20,8 @@ public class GenreDbStorage {
     }
 
     public List<Genre> allGenreOfOneFilm(Film film) {
-        String SQLlink = "select * from genres left join film_genre on genres.id = film_genre.id_genre where id_film = " + film.getId();
-        return this.jdbcTemplate.query(SQLlink, (resultSet, rowNum) -> {
+        String link = "select * from genres left join film_genre on genres.id = film_genre.id_genre where id_film = " + film.getId();
+        return this.jdbcTemplate.query(link, (resultSet, rowNum) -> {
             Genre genre = new Genre();
             genre.setId(resultSet.getInt("id"));
             genre.setName(resultSet.getString("name"));

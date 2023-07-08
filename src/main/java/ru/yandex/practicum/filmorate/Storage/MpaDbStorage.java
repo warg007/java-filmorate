@@ -18,8 +18,8 @@ public class MpaDbStorage {
     }
 
     public Mpa mpaOfOneFilm(Film film) {
-        String SQLlink = "select * from mpa_and_film left join mpa on mpa_and_film.id_mpa = mpa.id where id_film = " + film.getId();
-        return this.jdbcTemplate.queryForObject(SQLlink, (resultSet, rowNum) -> {
+        String link = "select * from mpa_and_film left join mpa on mpa_and_film.id_mpa = mpa.id where id_film = " + film.getId();
+        return this.jdbcTemplate.queryForObject(link, (resultSet, rowNum) -> {
             Mpa mpa = new Mpa();
             mpa.setId(resultSet.getInt("id_mpa"));
             mpa.setName(resultSet.getString("name"));
