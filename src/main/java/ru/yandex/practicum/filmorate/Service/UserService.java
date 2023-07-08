@@ -44,8 +44,8 @@ public class UserService {
     }
 
     public User getUserByIdService(int id) {
-        return userStorage.getUserById(id).
-                orElseThrow(() -> new DataNotExistsException("Не найден пользователь с id: " + id));
+        return userStorage.getUserById(id)
+                        .orElseThrow(() -> new DataNotExistsException("Не найден пользователь с id: " + id));
     }
 
     public void addNewFriend(int hostId, int friendId) {
