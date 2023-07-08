@@ -47,7 +47,7 @@ public class MpaDbStorage {
         });
     }
 
-    public Mpa getById (int id) {
+    public Mpa getById(int id) {
         try {
             return jdbcTemplate.queryForObject("select * from mpa where id = ?", new Object[]{id}, (resultSet, rowNum) -> {
                 Mpa mpa = new Mpa();
