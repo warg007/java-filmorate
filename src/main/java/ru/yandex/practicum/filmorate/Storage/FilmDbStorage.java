@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Component
 @Qualifier
 
-public class FilmDbStorage implements  FilmStorage{
+public class FilmDbStorage implements FilmStorage{
 
     private final  JdbcTemplate jdbcTemplate;
     private final GenreDbStorage genreDbStorage;
@@ -69,6 +69,7 @@ public class FilmDbStorage implements  FilmStorage{
         }
         return Optional.of(film);
     }
+
     private boolean checkLikeByUser(int userId, int filmId) {
         String link = "select id_film from likes where id_user = " + userId;
         List<Integer> idFilm = jdbcTemplate.query(link, (resultSet, rowNum) -> resultSet.getInt("id_film"));
