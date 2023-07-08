@@ -28,7 +28,7 @@ public class FriendDbStorage {
         String link = "select id_friend from friends where id_host = " + id;
         List<Integer> idFriend = jdbcTemplate.query(link, (resultSet, rowNum) -> resultSet.getInt("id_friend"));
         List<User> allFriendInOneList = new ArrayList<>();
-        for(int i: idFriend) {
+        for (int i: idFriend) {
             allFriendInOneList.add(jdbcTemplate.queryForObject("select * from users where id = ?", new Object[]{i}, new UserMapper()));
         }
         return allFriendInOneList;
