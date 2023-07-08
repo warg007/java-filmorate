@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class GenreDbStorageTest {
     private final GenreDbStorage genreDbStorage;
+
     @Test
     void allGenres() {
         List<Genre> allGenre = genreDbStorage.allGenres();
