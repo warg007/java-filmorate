@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Component
 @Qualifier
 
-public class FilmDbStorage implements FilmStorage{
+public class FilmDbStorage implements FilmStorage {
 
     private final  JdbcTemplate jdbcTemplate;
     private final GenreDbStorage genreDbStorage;
