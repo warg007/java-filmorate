@@ -26,7 +26,7 @@ class MpaDbStorageTest {
     static Film film;
 
     @BeforeAll
-    static private void init() {
+    private static void init() {
         film = new Film(1,
                 "name",
                 "des",
