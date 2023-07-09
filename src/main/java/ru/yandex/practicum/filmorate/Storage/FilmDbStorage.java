@@ -89,7 +89,7 @@ public class FilmDbStorage implements FilmStorage {
 
     public void deleteLike(int userId, int filmId) {
         String link = "delete from likes where id_film = ? and id_user = ?";
-        if (checkLikeByUser(userId, filmId) && getFilmById(filmId).isPresent()) {
+        if (!(checkLikeByUser(userId, filmId)) && getFilmById(filmId).isPresent()) {
             jdbcTemplate.update(link, filmId, userId);
             int updatedRate = getFilmById(filmId).get().getRate() - 1;
             Film updatedFilm = getFilmById(filmId).get();
