@@ -23,10 +23,10 @@ class MpaDbStorageTest {
     private final MpaDbStorage mpaDbStorage;
     private final FilmDbStorage filmDbStorage;
 
-    static Film film;
+    Film film;
 
-    @BeforeAll
-    private static void init() {
+    @BeforeEach
+    private void init() {
         film = new Film(1,
                 "name",
                 "des",
