@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.Storage;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,15 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserDbStorageTest {
     private final UserDbStorage userStorage;
 
-    User user1;
-    User user2;
-    User user3;
+    static User user1;
+    static User user2;
+    static User user3;
 
-    @BeforeEach
-    private void init() {
+    @BeforeAll
+    private static void init() {
         user1 = new User(1,
                 "test1@mail.ru",
                 "login1",
@@ -48,6 +48,7 @@ public class UserDbStorageTest {
     }
 
     @Test
+    @Order(1)
     public void testFindUserById() {
         userStorage.addNewUser(user1);
         Optional<User> userOptional = userStorage.getUserById(1);
@@ -60,6 +61,7 @@ public class UserDbStorageTest {
     }
 
     @Test
+    @Order(2)
     public void testGetAll() {
         userStorage.addNewUser(user2);
 
@@ -69,6 +71,7 @@ public class UserDbStorageTest {
     }
 
     @Test
+    @Order(3)
     public void testUpdate() {
         userStorage.update(user3);
 

@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.Storage;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MpaDbStorageTest {
     private final MpaDbStorage mpaDbStorage;
     private final FilmDbStorage filmDbStorage;
@@ -26,7 +26,7 @@ class MpaDbStorageTest {
     static Film film;
 
     @BeforeAll
-    static void init() {
+    static private void init() {
         film = new Film(1,
                 "name",
                 "des",
@@ -38,6 +38,7 @@ class MpaDbStorageTest {
     }
 
     @Test
+    @Order(1)
     void testGetAll() {
         List<Mpa> allMpa = mpaDbStorage.getAll();
 
@@ -45,6 +46,7 @@ class MpaDbStorageTest {
     }
 
     @Test
+    @Order(2)
     void testGetById() {
         Mpa mpa = mpaDbStorage.getById(1);
 
@@ -55,6 +57,7 @@ class MpaDbStorageTest {
     }
 
     @Test
+    @Order(3)
     void testMpaOfOneFilm() {
         filmDbStorage.addNew(film);
         Mpa expected = mpaDbStorage.mpaOfOneFilm(film);
