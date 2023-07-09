@@ -67,7 +67,7 @@ public class UserDbStorageTest {
 
         List<User> allUsers = userStorage.getAll();
 
-        assertEquals(2, allUsers.size());
+        assertEquals(3, allUsers.size());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class UserDbStorageTest {
         List<User> allUsersUpdated = userStorage.getAll();
         Optional<User> newUser1 = userStorage.getUserById(1);
 
-        assertEquals(2, allUsersUpdated.size());
+        assertEquals(3, allUsersUpdated.size());
         assertThat(newUser1)
                 .isPresent()
                 .hasValueSatisfying(user ->
