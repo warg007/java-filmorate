@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.Model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.Validation.MinimumDate;
 
 import javax.validation.constraints.NotBlank;
@@ -9,14 +12,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
-public class Film implements Comparable<Film> {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Film {
     private int id;
-    @NotBlank
+    @NotBlank(message = "Название фильма не может быть пустым")
     @NotNull(message = "Название фильма не может быть пустым")
     private String name;
     @Size(max = 200, message = "Кол-во символов в описание должно быть не больше 200")
@@ -25,13 +30,10 @@ public class Film implements Comparable<Film> {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительной")
     private long duration;
-    private final Set<Integer> likesList = new HashSet<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer rate;
+    private Mpa mpa;
+    private List<Genre> genres = new ArrayList<>();
 
-    @Override
-    public int compareTo(Film o) {
-        if (likesList.isEmpty()) {
-            return o.id - id;
-        }
-        return o.likesList.size() - likesList.size();
-    }
+
 }

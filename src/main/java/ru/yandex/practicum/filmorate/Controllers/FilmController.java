@@ -3,14 +3,7 @@ package ru.yandex.practicum.filmorate.Controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.Exceptions.ValidException;
 import ru.yandex.practicum.filmorate.Model.Film;
 import ru.yandex.practicum.filmorate.Service.FilmService;
@@ -37,8 +30,8 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film update(@Valid @RequestBody Film film) throws ValidException {
-        filmService.update(film);
-        return film;
+        return filmService.update(film);
+
     }
 
     @PostMapping("/films")

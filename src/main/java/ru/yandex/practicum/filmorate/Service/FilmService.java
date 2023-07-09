@@ -3,9 +3,10 @@ package ru.yandex.practicum.filmorate.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.Exceptions.DataNotExistsException;
 import ru.yandex.practicum.filmorate.Exceptions.HandlerNullPointException;
 import ru.yandex.practicum.filmorate.Model.Film;
-import ru.yandex.practicum.filmorate.Storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.Storage.FilmDbStorage;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmService {
-    private final InMemoryFilmStorage filmStorage;
+    private final FilmDbStorage filmStorage;
     private final UserService userService;
 
     public List<Film> getAll() {
@@ -24,7 +25,7 @@ public class FilmService {
     public Film update(Film film) {
         Optional<Film> timeless = filmStorage.update(film);
         if (timeless.isPresent()) {
-            log.info("Обновлены данные фильма: " + film);
+            log.info("Обновлены данные фильма: " + timeless);
             return timeless.get();
         } else {
             throw new HandlerNullPointException("Фильм с id " + film.getId() + " для обновления не найден");
@@ -39,27 +40,21 @@ public class FilmService {
     }
 
     public Film getFilmByIdService(int id) {
-        Optional<Film> timeless = filmStorage.getFilmById(id);
-        return timeless.orElseThrow(() -> new HandlerNullPointException("Не найден фильм с id: " + id));
+        return filmStorage.getFilmById(id)
+                .orElseThrow(() -> new DataNotExistsException("Не найден фильм с id: " + id));
     }
 
     public void likedFilm(int userId, int filmId) {
         String userName = userService.getUserByIdService(userId).getName();
         String filmName = getFilmByIdService(filmId).getName();
-        Film timeless = getFilmByIdService(filmId);
-        filmStorage.deleteFromTreeSet(timeless);
-        timeless.getLikesList().add(userId);
-        filmStorage.addToTreeSet(timeless);
+        filmStorage.likedFilm(userId, filmId);
         log.info(userName + " поставил(а) лайк фильму " + filmName);
     }
 
     public void deleteLike(int userId, int filmId) {
         String userName = userService.getUserByIdService(userId).getName();
         String filmName = getFilmByIdService(filmId).getName();
-        Film timeless  = getFilmByIdService(filmId);
-        filmStorage.deleteFromTreeSet(timeless);
-        timeless.getLikesList().remove(userId);
-        filmStorage.addToTreeSet(getFilmByIdService(filmId));
+        filmStorage.deleteLike(userId, filmId);
         log.info(userName + " удалил(а) свой лайк у фильма " + filmName);
     }
 

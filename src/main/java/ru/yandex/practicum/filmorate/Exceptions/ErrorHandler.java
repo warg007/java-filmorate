@@ -14,13 +14,6 @@ import java.util.Objects;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(ValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidException(ValidException e) {
-        log.warn("Ошибка валидации: " + e.getMessage());
-        return Map.of("Ошибка валидации: ", e.getMessage());
-    }
-
     @ExceptionHandler(HandlerNullPointException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNullPointer(HandlerNullPointException e) {
@@ -28,9 +21,16 @@ public class ErrorHandler {
         return Map.of("Ошибка: ", e.getMessage());
     }
 
+    @ExceptionHandler(DataNotExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleDataExists(DataNotExistsException e) {
+        log.warn("Ошибка: " + e.getMessage());
+        return Map.of("Ошибка: ", e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleNullPointer1(MethodArgumentNotValidException e) {
+    public Map<String, String> handleValidPointer(MethodArgumentNotValidException e) {
         String exceptionMessage = Objects.requireNonNull(e.getFieldError()).getDefaultMessage();
         log.warn("Ошибка валидации: " + exceptionMessage);
         return Map.of("Ошибка валидации: ", exceptionMessage);
